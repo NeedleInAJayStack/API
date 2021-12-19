@@ -13,6 +13,7 @@ public func configure(_ app: Application) throws {
     let password = try Environment.getOrThrow("DATABASE_PASSWORD")
     let database = try Environment.getOrThrow("DATABASE_NAME")
     app.databases.use(.postgres(hostname: hostname, username: username, password: password, database: database), as: .psql)
+    // app.logger.logLevel = .debug
 
     // register routes
     try routes(app)
