@@ -7,6 +7,9 @@ This is Jay's API for different datasets that he has.
 Create a `.env` file in this directory that contains necessary environment variables. For example:
 
 ```
+USERNAME=<username>
+PASSWORD=<password>
+
 DATABASE_HOST=<host>
 DATABASE_USERNAME=<username>
 DATABASE_PASSWORD=<password>
@@ -15,7 +18,7 @@ DATABASE_NAME=<name>
 
 ## Future work
 
-- Secure the API against unauthorized actors (doesn't have to be complex or even configurable - user/password could even be environment variables)
 - Add web-app to easily input data values
+- Add session authentication: https://docs.vapor.codes/4.0/authentication/#session
 - Change to GraphQL?
 - Consider aligning timestamp format (ISO8601 vs epoch)

@@ -1,24 +1,34 @@
 import Foundation
+import JWT
 import PostgresKit
 import SQLKit
 import Vapor
 
 func routes(_ app: Application) throws {
     
-    
-    let basicProtected = app.grouped(UserBasicAuthenticator()).grouped(User.guardMiddleware())
+    let basicAuth = app.grouped(UserBasicAuthenticator(), User.guardMiddleware())
     
     // MARK: Auth
-    basicProtected.group("auth") { auth in
-        // GET /auth/test
-        auth.get("test") { req -> String in
-            return try req.auth.require(User.self).name
+    
+    basicAuth.group("auth") { auth in
+        // GET /auth/token
+        auth.get("token") { req -> ClientTokenReponse in
+            let user = try req.auth.require(User.self)
+            
+            let payload = SessionToken(
+                subject: "vapor",
+                username: user.name
+            )
+            
+            return try ClientTokenReponse(token: req.jwt.sign(payload))
         }
     }
     
+    let tokenAuth = app.grouped(SessionToken.authenticator(), SessionToken.guardMiddleware())
+    
     // MARK: Rec
     
-    basicProtected.group("recs") { recs in
+    tokenAuth.group("recs") { recs in
         // GET /recs
         recs.get { req -> EventLoopFuture<[Rec]> in
             return Rec.query(on: req.db).all()
@@ -64,7 +74,7 @@ func routes(_ app: Application) throws {
     
     // MARK: His
     
-    basicProtected.group("his", ":pointId") { his in
+    tokenAuth.group("his", ":pointId") { his in
         // GET /his/:pointId?start=...&end=...
         // Note that start and end are in seconds since epoch (1970-01-01T00:00:00Z)
         his.get { req -> EventLoopFuture<[His]> in
@@ -124,6 +134,10 @@ func routes(_ app: Application) throws {
                 .transform(to: Success())
         }
     }
+}
+
+struct ClientTokenReponse: Content {
+    var token: String
 }
 
 struct Success: Content {

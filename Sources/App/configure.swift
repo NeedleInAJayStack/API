@@ -1,6 +1,7 @@
-import Vapor
 import Fluent
 import FluentPostgresDriver
+import JWT
+import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
@@ -14,6 +15,9 @@ public func configure(_ app: Application) throws {
     let database = try Environment.getOrThrow("DATABASE_NAME")
     app.databases.use(.postgres(hostname: hostname, username: username, password: password, database: database), as: .psql)
     // app.logger.logLevel = .debug
+    
+    // JWT config
+    app.jwt.signers.use(.hs256(key: "V12XGSmdZzgg3N4zhUtz"))
 
     // register routes
     try routes(app)
