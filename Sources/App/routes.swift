@@ -5,9 +5,20 @@ import Vapor
 
 func routes(_ app: Application) throws {
     
+    
+    let basicProtected = app.grouped(UserBasicAuthenticator()).grouped(User.guardMiddleware())
+    
+    // MARK: Auth
+    basicProtected.group("auth") { auth in
+        // GET /auth/test
+        auth.get("test") { req -> String in
+            return try req.auth.require(User.self).name
+        }
+    }
+    
     // MARK: Rec
     
-    app.group("recs") { recs in
+    basicProtected.group("recs") { recs in
         // GET /recs
         recs.get { req -> EventLoopFuture<[Rec]> in
             return Rec.query(on: req.db).all()
@@ -53,7 +64,7 @@ func routes(_ app: Application) throws {
     
     // MARK: His
     
-    app.group("his", ":pointId") { his in
+    basicProtected.group("his", ":pointId") { his in
         // GET /his/:pointId?start=...&end=...
         // Note that start and end are in seconds since epoch (1970-01-01T00:00:00Z)
         his.get { req -> EventLoopFuture<[His]> in
