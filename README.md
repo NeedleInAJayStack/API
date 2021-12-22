@@ -1,6 +1,6 @@
 # API
 
-This is Jay's API for different datasets that he has.
+This is Jay's API for different datasets. It requires a Timescale DB instance.
 
 ## Getting Started
 

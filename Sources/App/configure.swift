@@ -16,6 +16,9 @@ public func configure(_ app: Application) throws {
     app.databases.use(.postgres(hostname: hostname, username: username, password: password, database: database), as: .psql)
     // app.logger.logLevel = .debug
     
+    // Migrations
+    app.migrations.add(MigrationV1_0_0())
+    
     // JWT config
     app.jwt.signers.use(.hs256(key: "V12XGSmdZzgg3N4zhUtz"))
 
