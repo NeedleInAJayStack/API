@@ -5,8 +5,17 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
+    // CORS middleware so that browser can hit API correctly
+    let corsConfiguration = CORSMiddleware.Configuration(
+        allowedOrigin: .all,
+        allowedMethods: [.GET, .POST, .PUT, .OPTIONS, .DELETE, .PATCH],
+        allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith, .userAgent, .accessControlAllowOrigin]
+    )
+    app.middleware.use(CORSMiddleware(configuration: corsConfiguration), at: .beginning)
+    
     // File middleware to serve public files
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory, defaultFile: "index.html"))
+    
 
     // Database connection
     let hostname = try Environment.getOrThrow("DATABASE_HOST")
