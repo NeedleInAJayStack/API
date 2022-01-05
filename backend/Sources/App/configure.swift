@@ -13,6 +13,9 @@ public func configure(_ app: Application) throws {
     )
     app.middleware.use(CORSMiddleware(configuration: corsConfiguration), at: .beginning)
     
+    // Sessions middleware
+    app.middleware.use(app.sessions.middleware)
+    
     // File middleware to serve public files
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory, defaultFile: "index.html"))
     
