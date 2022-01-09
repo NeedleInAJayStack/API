@@ -14,7 +14,7 @@ const authProvider = {
         response.json().then(result => {
 					let token = result.token;
 					setTimeout(callback(token), 100);
-					// console.log(token);
+					console.log(token);
 				})
       } else {
         alert("User or password not recognized")
