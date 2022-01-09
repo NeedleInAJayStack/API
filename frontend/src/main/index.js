@@ -7,35 +7,48 @@ import {
   useNavigate,
   Navigate
 } from "react-router-dom";
+import Box from '@mui/material/Box';
 
 import { 
   AuthProvider,
   useAuth
 } from "./auth";
+import Header from "./header";
 import Login from "./login";
 import Dashboard from "./dashboard";
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route 
-            path="/login"
-            element={
-              <Login /> 
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <RequireAuth>
-                <Dashboard />
-              </RequireAuth>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <Box component="div" sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
+        <Header />
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1}}>
+          <BrowserRouter>
+            <Routes>
+              <Route 
+                path="/"
+                element={
+                  <Navigate to="/dashboard" replace />
+                }
+              />
+              <Route 
+                path="/login"
+                element={
+                  <Login /> 
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <RequireAuth>
+                    <Dashboard />
+                  </RequireAuth>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </Box>
+      </Box>
     </AuthProvider>
   );
 }
