@@ -1,5 +1,8 @@
 import React from "react";
-import base64 from "base-64";
+import {
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,32 +16,32 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
+import { useAuth } from "../auth";
+
 function Login(props) {
   const [state, setState] = React.useState({
     username: "",
     password: "",
   });
 
+  let navigate = useNavigate();
+  let location = useLocation();
+  let auth = useAuth();
+
+  let from = location.state?.from?.pathname || "/";
+
   function handleSetUsername(event) {
     setState({ ...state, username: event.target.value });
   }
+
   function handleSetPassword(event) {
     setState({ ...state, password: event.target.value });
   }
+
   function handleSubmit(event) {
     event.preventDefault();
-
-    fetch('http://localhost:8080/auth/token', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Basic ' + base64.encode(state.username + ":" + state.password)
-      }
-    }).then(response => {
-      if (response.ok) {
-        response.json().then(result =>
-          props.onGetToken(result.token)
-        )
-      }
+    auth.signin(state.username, state.password, () => {
+      navigate(from, { replace: true });
     });
   }
 
