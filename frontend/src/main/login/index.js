@@ -18,7 +18,7 @@ import TextField from '@mui/material/TextField';
 
 import { useAuth } from "../auth";
 
-function Login(props) {
+export default function Login(props) {
   const [state, setState] = React.useState({
     username: "",
     password: "",
@@ -77,5 +77,3 @@ function Login(props) {
     </Box>
   );
 }
-
-export default Login;

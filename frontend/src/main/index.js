@@ -7,11 +7,13 @@ import {
   useNavigate,
   Navigate
 } from "react-router-dom";
+
 import { 
   AuthProvider,
   useAuth
 } from "./auth";
 import Login from "./login";
+import Dashboard from "./dashboard";
 
 function App() {
   return (
@@ -25,10 +27,10 @@ function App() {
             }
           />
           <Route
-            path="/protected"
+            path="/dashboard"
             element={
               <RequireAuth>
-                <LoggedIn />
+                <Dashboard />
               </RequireAuth>
             }
           />
@@ -72,14 +74,6 @@ function AuthStatus() {
         Sign out
       </button>
     </p>
-  );
-}
-
-function LoggedIn() {
-  let auth = useAuth();
-
-  return (
-    <h3>Logged in as {auth.state.user}</h3>
   );
 }
 
