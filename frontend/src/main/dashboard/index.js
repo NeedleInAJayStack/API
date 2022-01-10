@@ -3,10 +3,8 @@ import React from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
-import { useAuth } from "../auth";
-
-export default function Dashboard() {
-	let auth = useAuth();
+export default function Dashboard(props) {
+	let token = props.token;
 
 	const [state, setState] = React.useState({
 		data: "",
@@ -19,8 +17,7 @@ export default function Dashboard() {
 		fetch('http://localhost:8080/recs', {
 				method: 'GET',
 				headers: {
-					// TODO: The auth token is not be stored statefully...
-					'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2YXBvciIsInVzZXJuYW1lIjoidGVzdCIsImV4cCI6MTY0MTc1ODY3OS41NzM2NjYxfQ.-dLtPU3jr1qidOC0K-_OJyMc7RClSPjRLek5T02GRwE'//'Bearer ' + auth.token
+					'Authorization': 'Bearer ' + token
 				}
 		}).then(response => {
 			if (response.ok) {

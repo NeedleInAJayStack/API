@@ -1,3 +1,4 @@
+import base64 from "base-64";
 import React from "react";
 import {
   BrowserRouter,
@@ -9,55 +10,84 @@ import {
 } from "react-router-dom";
 import Box from '@mui/material/Box';
 
-import { 
-  AuthProvider,
-  useAuth
-} from "./auth";
 import Header from "./header";
 import Login from "./login";
 import Dashboard from "./dashboard";
 
-function App() {
+export default function App() {
+  let [state, setState] = React.useState({
+		user: null,
+		token: null
+	});
+
+  let signin = (username, password, callback) => {
+    fetch('http://localhost:8080/auth/token', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Basic ' + base64.encode(username + ":" + password)
+      }
+    }).then(response => {
+      if (response.ok) {
+        response.json().then(result => {
+					let token = result.token;
+          setState({
+            user: username,
+            token: token
+          });
+          callback();
+				})
+      } else {
+        alert("User or password not recognized")
+      }
+    });
+  };
+
+  let signout = (callback) => {
+    setState({
+      user: null,
+      token: null
+    });
+    callback();
+  };
+
   return (
-    <AuthProvider>
-      <Box component="div" sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
-        <Header />
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1}}>
-          <BrowserRouter>
-            <Routes>
-              <Route 
-                path="/"
-                element={
-                  <Navigate to="/dashboard" replace />
-                }
-              />
-              <Route 
-                path="/login"
-                element={
-                  <Login /> 
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-        </Box>
+    <Box component="div" sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
+      <Header />
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1}}>
+        <BrowserRouter>
+          <Routes>
+            <Route 
+              path="/"
+              element={
+                <Navigate to="/dashboard" replace />
+              }
+            />
+            <Route 
+              path="/login"
+              element={
+                <Login onLogin={signin}/> 
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <RequireAuth token={state.token} >
+                  <Dashboard token={state.token} />
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </Box>
-    </AuthProvider>
+    </Box>
   );
 }
 
-function RequireAuth({ children }) {
-  let auth = useAuth();
+function RequireAuth(props) {
+  let token = props.token;
   let location = useLocation();
 
-  if (!auth.state.user) {
+  if (!token) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
@@ -65,7 +95,7 @@ function RequireAuth({ children }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return children;
+  return props.children;
 }
 
 function AuthStatus() {
@@ -89,5 +119,3 @@ function AuthStatus() {
     </p>
   );
 }
-
-export default App;

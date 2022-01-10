@@ -9,8 +9,6 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
-import { useAuth } from "../auth";
-
 export default function Login(props) {
   const [state, setState] = React.useState({
     username: "",
@@ -19,7 +17,7 @@ export default function Login(props) {
 
   let navigate = useNavigate();
   let location = useLocation();
-  let auth = useAuth();
+  let onLogin = props.onLogin;
 
   let from = location.state?.from?.pathname || "/";
 
@@ -33,7 +31,7 @@ export default function Login(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    auth.signin(state.username, state.password, () => {
+    onLogin(state.username, state.password, () => {
       navigate(from, { replace: true });
     });
   }
