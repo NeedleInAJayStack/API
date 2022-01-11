@@ -1,30 +1,37 @@
 import React from "react";
 
+import formatISO from 'date-fns/formatISO';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
-// import AdapterDateFns from '@mui/lab/AdapterDateFns';
-// import LocalizationProvider from '@mui/lab/LocalizationProvider';
-// import DatePicker from '@mui/lab/DatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
 export default function Dashboard(props) {
 	let token = props.token;
 	
 	const [state, setState] = React.useState({
-		point: null,
-		startDate: null,
+		point: "",
+		startDate: Date(),
+		endDate: Date(),
 		data: null
 	});
 	
   function handleGetData(event) {
     event.preventDefault();
+		let startDateStr = formatISO(state.startDate);
+		let endDateStr = formatISO(state.endDate);
+		let url = "http://localhost:8080/his/" + state.point + "?start=" + startDateStr + ",end=" + endDateStr;
+		console.log(url);
 		
-		fetch('http://localhost:8080/recs', {
+		fetch("http://localhost:8080/his/" + state.point + "?start=" + startDateStr + ",end=" + endDateStr, {
 				method: 'GET',
 				headers: {
 					'Authorization': 'Bearer ' + token
@@ -33,9 +40,7 @@ export default function Dashboard(props) {
 			if (response.ok) {
 				response.json().then(result => {
 					console.log(result);
-					let firstResult = result[0];
-					let resultString = "id: " + firstResult.id + ", dis: " + firstResult.dis;
-					setState({...state, data: resultString});
+					setState({...state, data: result});
 				})
 			} else {
 				alert("User or password not recognized")
@@ -49,8 +54,7 @@ export default function Dashboard(props) {
 	}
 
 	return (
-		<Stack spacing={2}>
-			{/* <Button variant="contained" onClick={handleGetData} >Get Data</Button> */}
+		<Box sx={{ display: "flex", marginTop: 5}}>
 			<Box sx={{ minWidth: 120 }}>
 				<FormControl fullWidth>
 					<InputLabel id="point-select-label">Point</InputLabel>
@@ -66,7 +70,7 @@ export default function Dashboard(props) {
 					</Select>
 				</FormControl>
 			</Box>
-			{/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+			<LocalizationProvider dateAdapter={AdapterDateFns}>
 				<DatePicker
 					label="Start date"
 					value={state.startDate}
@@ -75,7 +79,16 @@ export default function Dashboard(props) {
 					}}
 					renderInput={(params) => <TextField {...params} />}
 				/>
-			</LocalizationProvider> */}
-		</Stack>
+				<DatePicker
+					label="End date"
+					value={state.endDate}
+					onChange={(newDate) => {
+						setState({...state, endDate: newDate});
+					}}
+					renderInput={(params) => <TextField {...params} />}
+				/>
+			</LocalizationProvider>
+			<Button variant="contained" onClick={handleGetData} >Get Data</Button>
+		</Box>
 	);
 }
