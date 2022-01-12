@@ -1,6 +1,7 @@
 import React from "react";
 
 import getUnixTime from 'date-fns/getUnixTime';
+import parseISO from 'date-fns/parseISO';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,6 +17,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
+import Plot from 'react-plotly.js';
+
 export default class Dashboard extends React.Component {
 
 	constructor(props) {
@@ -28,7 +31,7 @@ export default class Dashboard extends React.Component {
 			point: "",
 			startDate: Date.now(),
 			endDate: Date.now(),
-			his: null
+			his: []
 		};
 	}
 
@@ -75,7 +78,13 @@ export default class Dashboard extends React.Component {
 					'Authorization': 'Bearer ' + this.token
 				}
 			});
-			let his = await response.json();
+			let json = await response.json();
+			let his = json.map(row => {
+				let ts = parseISO(row.ts)
+				let value = row.value
+
+				return {ts: ts, value: value}
+			});
 			console.log(his);
 			this.setState({...this.state, isFetching: false, his: his});
 		} catch (e) {
@@ -86,42 +95,55 @@ export default class Dashboard extends React.Component {
 
 	render() {
 		return (
-			<Stack direction="row" spacing={2} sx={{ display: "flex", marginTop: 5 }}>
-				<Box sx={{ minWidth: 120 }}>
-					<FormControl fullWidth>
-						<InputLabel id="point-select-label">Point</InputLabel>
-						<Select
-							labelId="point-select-label"
-							id="point-select"
-							value={this.state.point}
-							label="Point"
-							onChange={(event) => { this.handlePointSelect(event) }}
-						>
-						{this.state.points.map( point => <MenuItem key={point.id} value={point.id}>{point.dis}</MenuItem> )}
-						</Select>
-					</FormControl>
+			<Box sx={{flexGrow: 1, width:"100%", display: 'flex', flexDirection: 'column', alignItems: "center"}}>
+				<Stack direction="row" spacing={2} sx={{ display: "flex", marginTop: 5 }}>
+					<Box sx={{ minWidth: 120 }}>
+						<FormControl fullWidth>
+							<InputLabel id="point-select-label">Point</InputLabel>
+							<Select
+								labelId="point-select-label"
+								id="point-select"
+								value={this.state.point}
+								label="Point"
+								onChange={(event) => { this.handlePointSelect(event) }}
+							>
+							{this.state.points.map( point => <MenuItem key={point.id} value={point.id}>{point.dis}</MenuItem> )}
+							</Select>
+						</FormControl>
+					</Box>
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+						<DatePicker
+							label="Start date"
+							value={this.state.startDate}
+							onChange={(newDate) => {
+								this.setState({...this.state, startDate: newDate});
+							}}
+							renderInput={(params) => <TextField {...params} />}
+						/>
+						<DatePicker
+							label="End date"
+							value={this.state.endDate}
+							onChange={(newDate) => {
+								this.setState({...this.state, endDate: newDate});
+							}}
+							renderInput={(params) => <TextField {...params} />}
+						/>
+					</LocalizationProvider>
+					<Button variant="contained" onClick={(event) => { this.fetchHis(event) }} >Get Data</Button>
+				</Stack>
+				<Box sx={{flexGrow: 1, width: '100%'}}>
+					<Plot
+						style={{width: "100%", height: "100%"}}
+						useResizeHandler={true}
+						data={[{
+							type: "scatter",
+							mode: "lines",
+							x: this.state.his.map( hisRow => hisRow.ts ),
+							y: this.state.his.map( hisRow => hisRow.value ),
+						}]}
+					/>
 				</Box>
-				<LocalizationProvider dateAdapter={AdapterDateFns}>
-					<DatePicker
-						label="Start date"
-						value={this.state.startDate}
-						onChange={(newDate) => {
-							this.setState({...this.state, startDate: newDate});
-						}}
-						renderInput={(params) => <TextField {...params} />}
-					/>
-					<DatePicker
-						label="End date"
-						value={this.state.endDate}
-						onChange={(newDate) => {
-							this.setState({...this.state, endDate: newDate});
-						}}
-						renderInput={(params) => <TextField {...params} />}
-					/>
-				</LocalizationProvider>
-				<Button variant="contained" onClick={(event) => { this.fetchHis(event) }} >Get Data</Button>
-			</Stack>
-			// {this.state.isFetching ? <CircularProgress /> : <p>loaded</p>}
+			</Box>
 		);
 	}
 }
