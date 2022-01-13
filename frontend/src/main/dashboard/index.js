@@ -17,7 +17,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
-import Plot from 'react-plotly.js';
+import Chart from './chart';
 
 export default class Dashboard extends React.Component {
 
@@ -37,12 +37,6 @@ export default class Dashboard extends React.Component {
 
 	componentDidMount() {
 		this.fetchPoints();
-		this.timer = setInterval(() => this.fetchPoints(), 5000);
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.timer);
-		this.timer = null;
 	}
 
   handlePointSelect(event) {
@@ -72,7 +66,7 @@ export default class Dashboard extends React.Component {
 		let endDateSecs = getUnixTime(this.state.endDate);
 		
 		try {
-			let response = await fetch("http://localhost:8080/his/" + this.state.point + "?start=" + startDateSecs + "&end=" + endDateSecs, {
+			let response = await fetch("http://localhost:8080/his/" + this.state.point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
 				method: 'GET',
 				headers: {
 					'Authorization': 'Bearer ' + this.token
@@ -96,7 +90,7 @@ export default class Dashboard extends React.Component {
 	render() {
 		return (
 			<Box sx={{flexGrow: 1, width:"100%", display: 'flex', flexDirection: 'column', alignItems: "center"}}>
-				<Stack direction="row" spacing={2} sx={{ display: "flex", marginTop: 5 }}>
+				<Stack direction="row" spacing={2} sx={{ display: "flex", marginTop: 5}}>
 					<Box sx={{ minWidth: 120 }}>
 						<FormControl fullWidth>
 							<InputLabel id="point-select-label">Point</InputLabel>
@@ -107,7 +101,7 @@ export default class Dashboard extends React.Component {
 								label="Point"
 								onChange={(event) => { this.handlePointSelect(event) }}
 							>
-							{this.state.points.map( point => <MenuItem key={point.id} value={point.id}>{point.dis}</MenuItem> )}
+							{this.state.points.map( point => <MenuItem key={point.id} value={point}>{point.dis}</MenuItem> )}
 							</Select>
 						</FormControl>
 					</Box>
@@ -131,18 +125,10 @@ export default class Dashboard extends React.Component {
 					</LocalizationProvider>
 					<Button variant="contained" onClick={(event) => { this.fetchHis(event) }} >Get Data</Button>
 				</Stack>
-				<Box sx={{flexGrow: 1, width: '100%'}}>
-					<Plot
-						style={{width: "100%", height: "100%"}}
-						useResizeHandler={true}
-						data={[{
-							type: "scatter",
-							mode: "lines",
-							x: this.state.his.map( hisRow => hisRow.ts ),
-							y: this.state.his.map( hisRow => hisRow.value ),
-						}]}
-					/>
-				</Box>
+				<Chart
+					pointName={this.state.point.dis}
+					data={this.state.his.map( hisRow => { return {x: hisRow.ts, y: hisRow.value}; })}
+				/>
 			</Box>
 		);
 	}
