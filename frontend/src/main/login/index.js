@@ -21,27 +21,45 @@ export default function Login(props) {
 
   let from = location.state?.from?.pathname || "/";
 
-  function handleSetUsername(event) {
-    setState({ ...state, username: event.target.value });
-  }
-
-  function handleSetPassword(event) {
-    setState({ ...state, password: event.target.value });
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit() {
     onLogin(state.username, state.password, () => {
       navigate(from, { replace: true });
     });
   }
 
   return (
-    <Box component="form" sx={{flexGrow: 1,  display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%', maxWidth: 400 }}>
+    <Box 
+      component="form"
+      sx={{flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        width: '100%',
+        maxWidth: 400
+      }}
+    >
       <Stack spacing={2}>
-        <TextField id="username" label="Username" variant="outlined" onChange={handleSetUsername} />
-        <TextField id="password" type="password" label="Password" variant="outlined" onChange={handleSetPassword} />
-        <Button variant="contained" onClick={handleSubmit} >Log In</Button>
+        <TextField
+          label="Username"
+          variant="outlined"
+          onChange={ (event) => {
+            setState({ ...state, username: event.target.value });
+          }}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          variant="outlined"
+          onChange={ (event) => {
+            setState({ ...state, password: event.target.value });
+          }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+        >
+          Log In
+        </Button>
       </Stack>
     </Box>
   );

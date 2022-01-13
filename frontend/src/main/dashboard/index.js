@@ -24,7 +24,6 @@ export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		this.token = props.token;
 		this.state = {
 			isFetching: false,
 			points: [],
@@ -39,17 +38,12 @@ export default class Dashboard extends React.Component {
 		this.fetchPoints();
 	}
 
-  handlePointSelect(event) {
-    event.preventDefault();
-		this.setState({...this.state, point: event.target.value});
-	}
-
 	async fetchPoints() {
 		try {
 			let response = await fetch("http://localhost:8080/recs/", {
 			method: 'GET',
 				headers: {
-					'Authorization': 'Bearer ' + this.token
+					'Authorization': 'Bearer ' + this.props.token
 				}
 			})
 			let points = await response.json();
@@ -59,8 +53,7 @@ export default class Dashboard extends React.Component {
 		}
 	}
 	
-  async fetchHis(event) {
-    event.preventDefault();
+  async fetchHis() {
 		this.setState({...this.state, isFetching: true});
 		let startDateSecs = getUnixTime(this.state.startDate);
 		let endDateSecs = getUnixTime(this.state.endDate);
@@ -69,7 +62,7 @@ export default class Dashboard extends React.Component {
 			let response = await fetch("http://localhost:8080/his/" + this.state.point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
 				method: 'GET',
 				headers: {
-					'Authorization': 'Bearer ' + this.token
+					'Authorization': 'Bearer ' + this.props.token
 				}
 			});
 			let json = await response.json();
@@ -79,7 +72,6 @@ export default class Dashboard extends React.Component {
 
 				return {ts: ts, value: value}
 			});
-			console.log(his);
 			this.setState({...this.state, isFetching: false, his: his});
 		} catch (e) {
 			this.setState({...this.state, isFetching: false});
@@ -99,7 +91,9 @@ export default class Dashboard extends React.Component {
 								id="point-select"
 								value={this.state.point}
 								label="Point"
-								onChange={(event) => { this.handlePointSelect(event) }}
+								onChange={(event) => {
+									this.setState({...this.state, point: event.target.value});
+								}}
 							>
 							{this.state.points.map( point => <MenuItem key={point.id} value={point}>{point.dis}</MenuItem> )}
 							</Select>
