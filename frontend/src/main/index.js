@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import Header from "./header";
 import Login from "./login";
 import Dashboard from "./dashboard";
+import Input from "./input";
 
 export default function App() {
   let [state, setState] = React.useState({
@@ -73,6 +74,14 @@ export default function App() {
               element={
                 <RequireAuth token={state.token} >
                   <Dashboard token={state.token} />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/input"
+              element={
+                <RequireAuth token={state.token} >
+                  <Input token={state.token} />
                 </RequireAuth>
               }
             />
