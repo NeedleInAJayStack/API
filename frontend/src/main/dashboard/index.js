@@ -18,6 +18,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
 import Chart from './chart';
+import Input from './input';
 
 export default class Dashboard extends React.Component {
 
@@ -119,9 +120,16 @@ export default class Dashboard extends React.Component {
 					</LocalizationProvider>
 					<Button variant="contained" onClick={(event) => { this.fetchHis(event) }} >Get Data</Button>
 				</Stack>
-				<Chart
-					pointName={this.state.point.dis}
-					data={this.state.his.map( hisRow => { return {x: hisRow.ts, y: hisRow.value}; })}
+				<Box sx={{flexGrow: 1, padding: 5, width: "95%"}}>
+					<Chart
+						pointName={this.state.point.dis}
+						data={this.state.his.map( hisRow => { return {x: hisRow.ts, y: hisRow.value}; })}
+					/>
+				</Box>
+				<Input
+				  token={this.props.token}
+				  point={this.state.point}
+				  onSave={ () => this.fetchHis() }
 				/>
 			</Box>
 		);

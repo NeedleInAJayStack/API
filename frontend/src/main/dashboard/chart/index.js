@@ -25,33 +25,29 @@ export default class Chart extends React.Component {
 	render() {
 		if (this.props.data.length == 0) {
 			return (
-				<Box sx={{flexGrow: 1, padding: 5, width: "95%", height: "95%"}}>
-					<Typography align="center" >No data</Typography>
-				</Box>
+				<Typography align="center" >No data</Typography>
 			);
 		} else {
 			return (
-				<Box sx={{flexGrow: 1, padding: 5, width: "95%"}}>
-					<Scatter 
-						options={{
-							scales: {
-								x: {
-									type: 'timeseries',
-								}
-							},
-							showLine: true,
-							backgroundColor: "rgba(25,118,210,1)",
-							borderColor: "rgba(25,118,210,1)",
-							maintainAspectRatio: false
-						}}
-						data={{
-							datasets: [{
-								label: this.props.pointName,
-								data: this.props.data,
-							}]
-						}}
-					/>
-				</Box>
+				<Scatter 
+					options={{
+						scales: {
+							x: {
+								type: 'timeseries',
+							}
+						},
+						showLine: true,
+						backgroundColor: "rgba(25,118,210,1)",
+						borderColor: "rgba(25,118,210,1)",
+						maintainAspectRatio: false
+					}}
+					data={{
+						datasets: [{
+							label: this.props.pointName,
+							data: this.props.data,
+						}]
+					}}
+				/>
 			);
 		}
 	}
