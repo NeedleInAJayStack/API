@@ -5,6 +5,12 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
+    // Change to encode/decode dates as ISO strings
+    let encoder: JSONEncoder = .custom(dates: .iso8601)
+    ContentConfiguration.global.use(encoder: encoder, for: .json)
+    let decoder: JSONDecoder = .custom(dates: .iso8601)
+    ContentConfiguration.global.use(decoder: decoder, for: .json)
+
     // CORS middleware so that browser can hit API correctly
     let corsConfiguration = CORSMiddleware.Configuration(
         allowedOrigin: .all,
