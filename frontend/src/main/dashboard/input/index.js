@@ -1,12 +1,11 @@
 import React from "react";
 
 import formatISO from "date-fns/formatISO";
+import startOfToday from 'date-fns/startOfToday';
 
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -25,13 +24,12 @@ export default class Input extends React.Component {
 		// }
 		
 		this.state = {
-			date: Date.now(),
+			date: startOfToday(),
 			value: 0,
 		};
 	}
 	
   async writeHis() {
-		// TODO: Align ts to start of day.
 		// TODO: Add in value float validation
 		let body = {
 			pointId: this.props.point.id,

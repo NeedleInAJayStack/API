@@ -2,10 +2,11 @@ import React from "react";
 
 import getUnixTime from 'date-fns/getUnixTime';
 import parseISO from 'date-fns/parseISO';
+import startOfToday from 'date-fns/startOfToday';
+import subMonths from 'date-fns/subMonths';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -29,8 +30,8 @@ export default class Dashboard extends React.Component {
 			isFetching: false,
 			points: [],
 			point: "",
-			startDate: Date.now(),
-			endDate: Date.now(),
+			startDate: subMonths(startOfToday(), 1),
+			endDate: startOfToday(),
 			his: []
 		};
 	}
