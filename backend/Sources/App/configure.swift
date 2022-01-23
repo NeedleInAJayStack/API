@@ -43,16 +43,3 @@ public func configure(_ app: Application) throws {
     // register routes
     try routes(app)
 }
-
-enum ApiError: Error {
-    case environmentInvalid(_ message: String)
-}
-
-extension Environment {
-    static func getOrThrow(_ name: String) throws -> String {
-        guard let value = Self.get(name) else {
-            throw ApiError.environmentInvalid("\(name) must be set")
-        }
-        return value
-    }
-}
