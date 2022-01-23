@@ -12,7 +12,9 @@ struct RecController: RouteCollection {
 
         // GET /recs
         recs.get { req -> EventLoopFuture<[Rec]> in
-            return Rec.query(on: req.db).all()
+            return Rec.query(on: req.db)
+                .sort(\.$dis)
+                .all()
         }
 
         // POST /recs

@@ -31,6 +31,7 @@ struct HisController: RouteCollection {
                     }
                     return groupQuery
                 }
+                .orderBy("ts", .ascending)
                 .all(decoding: His.self)
         }
 
