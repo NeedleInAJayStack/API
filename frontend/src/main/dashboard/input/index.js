@@ -2,6 +2,7 @@ import React from "react";
 
 import formatISO from "date-fns/formatISO";
 import startOfToday from 'date-fns/startOfToday';
+import subDays from 'date-fns/subDays';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -24,7 +25,7 @@ export default class Input extends React.Component {
 		// }
 		
 		this.state = {
-			date: startOfToday(),
+			date: subDays(startOfToday(), 1),
 			value: 0,
 		};
 	}
@@ -74,7 +75,7 @@ export default class Input extends React.Component {
 				<Button
 					variant="contained"
 					onClick={(event) => {
-						this.writeHis(event);
+						this.writeHis();
 						this.props.onSave(); 
 					}}
 				>

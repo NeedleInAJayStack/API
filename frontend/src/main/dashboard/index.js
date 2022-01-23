@@ -1,12 +1,9 @@
 import React from "react";
 
-import getUnixTime from 'date-fns/getUnixTime';
-import parseISO from 'date-fns/parseISO';
 import startOfToday from 'date-fns/startOfToday';
-import subMonths from 'date-fns/subMonths';
+import subYears from 'date-fns/subYears';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -30,7 +27,7 @@ export default class Dashboard extends React.Component {
 			isFetching: false,
 			points: [],
 			point: "",
-			startDate: subMonths(startOfToday(), 1),
+			startDate: subYears(startOfToday(), 3),
 			endDate: startOfToday(),
 			his: []
 		};
@@ -51,32 +48,6 @@ export default class Dashboard extends React.Component {
 			let points = await response.json();
 			this.setState({...this.state, points: points});
 		} catch (e) {
-			console.log(e);
-		}
-	}
-	
-  async fetchHis() {
-		this.setState({...this.state, isFetching: true});
-		let startDateSecs = getUnixTime(this.state.startDate);
-		let endDateSecs = getUnixTime(this.state.endDate);
-		
-		try {
-			let response = await fetch("http://localhost:8080/his/" + this.state.point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
-				method: 'GET',
-				headers: {
-					'Authorization': 'Bearer ' + this.props.token
-				}
-			});
-			let json = await response.json();
-			let his = json.map(row => {
-				let ts = parseISO(row.ts)
-				let value = row.value
-
-				return {ts: ts, value: value}
-			});
-			this.setState({...this.state, isFetching: false, his: his});
-		} catch (e) {
-			this.setState({...this.state, isFetching: false});
 			console.log(e);
 		}
 	}
@@ -119,18 +90,22 @@ export default class Dashboard extends React.Component {
 							renderInput={(params) => <TextField {...params} />}
 						/>
 					</LocalizationProvider>
-					<Button variant="contained" onClick={(event) => { this.fetchHis(event) }} >Get Data</Button>
 				</Stack>
 				<Box sx={{flexGrow: 1, padding: 5, width: "95%"}}>
 					<Chart
-						pointName={this.state.point.dis}
-						data={this.state.his.map( hisRow => { return {x: hisRow.ts, y: hisRow.value}; })}
+					  token={this.props.token}
+						point={this.state.point}
+						startDate={this.state.startDate}
+						endDate={this.state.endDate}
 					/>
 				</Box>
 				<Input
 				  token={this.props.token}
 				  point={this.state.point}
-				  onSave={ () => this.fetchHis() }
+				  onSave={ () => {
+						// TODO: Fix this to force a chart update...
+						// this.fetchHis()
+					}}
 				/>
 			</Box>
 		);
