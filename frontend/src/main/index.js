@@ -16,9 +16,9 @@ import Dashboard from "./dashboard";
 
 export default function App() {
   let [state, setState] = React.useState({
-		user: null,
-		token: null
-	});
+    user: null,
+    token: null
+  });
 
   let signin = (username, password, callback) => {
     fetch('http://localhost:8080/auth/token', {
@@ -29,13 +29,13 @@ export default function App() {
     }).then(response => {
       if (response.ok) {
         response.json().then(result => {
-					let token = result.token;
+          let token = result.token;
           setState({
             user: username,
             token: token
           });
           callback();
-				})
+        })
       } else {
         alert("User or password not recognized")
       }
