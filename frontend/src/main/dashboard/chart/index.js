@@ -78,7 +78,7 @@ export default class Chart extends React.Component {
           options={{
             scales: {
               x: {
-                type: 'timeseries',
+                type: 'time',
               },
               y: {
                 ticks: {

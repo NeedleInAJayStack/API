@@ -106,7 +106,7 @@ export default class Dashboard extends React.Component {
           onSave={ () => {
             // TODO: Fix this to force a chart update...
             // this.fetchHis()
-            document.getElementById("chart").render();
+            // document.getElementById("chart").render();
           }}
         />
       </Box>
