@@ -4,6 +4,20 @@ object-assign
 @license MIT
 */
 
+/*!
+ * Chart.js v3.7.0
+ * https://www.chartjs.org
+ * (c) 2021 Chart.js Contributors
+ * Released under the MIT License
+ */
+
+/*!
+ * chartjs-adapter-date-fns v2.0.0
+ * https://www.chartjs.org
+ * (c) 2021 chartjs-adapter-date-fns Contributors
+ * Released under the MIT license
+ */
+
 /*! https://mths.be/base64 v1.0.0 by @mathias | MIT license */
 
 /**
@@ -43,6 +57,15 @@ object-assign
 
 /** @license React v17.0.2
  * react-dom.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.2
+ * react-is.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
