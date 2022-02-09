@@ -1,9 +1,5 @@
 import React from "react";
-
-import getUnixTime from 'date-fns/getUnixTime';
 import format from "date-fns/format";
-import parseISO from 'date-fns/parseISO';
-
 import Typography from '@mui/material/Typography';
 
 import {
@@ -24,49 +20,15 @@ export default class Chart extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      his: [],
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    // Only fetch history if something has changed
-    if (this.props !== prevProps) {
-      this.fetchHis();
-    }
-  }
-
-  async fetchHis() {
-    if (this.props.point == "") {
-      return;
-    }
-
-    let startDateSecs = getUnixTime(this.props.startDate);
-    let endDateSecs = getUnixTime(this.props.endDate);
-    
-    try {
-      let response = await fetch("http://localhost:8080/his/" + this.props.point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + this.props.token
-        }
-      });
-      let json = await response.json();
-      let his = json.map(row => {
-        let ts = parseISO(row.ts)
-        let value = row.value
-
-        return {x: ts, y: value}
-      });
-      this.setState({...this.state, his: his});
-    } catch (e) {
-      this.setState({...this.state});
-      console.log(e);
-    }
+    // props:
+    // {
+    //   point: {dis: String, unit: String}
+    //   his: [{x: Date, y: Float}]
+    // }
   }
 
   render() {
-    if (this.state.his.length == 0) {
+    if (this.props.his.length == 0) {
       return (
         <Typography align="center" >No data</Typography>
       );
@@ -117,7 +79,7 @@ export default class Chart extends React.Component {
           data={{
             datasets: [{
               label: label,
-              data: this.state.his,
+              data: this.props.his,
             }]
           }}
         />
