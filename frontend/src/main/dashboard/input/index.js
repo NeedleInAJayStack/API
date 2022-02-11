@@ -37,7 +37,7 @@ export default class Input extends React.Component {
       value: this.state.value
     };
     try {
-      await fetch("http://localhost:8080/his/" + this.props.point.id, {
+      await fetch(backendUrl() + "/his/" + this.props.point.id, {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + this.props.token,

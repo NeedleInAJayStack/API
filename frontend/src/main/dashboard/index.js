@@ -20,11 +20,17 @@ import DatePicker from '@mui/lab/DatePicker';
 
 import Chart from './chart';
 import Input from './input';
+import backendUrl from "../backendUrl";
 
 export default class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
+    
+    // Props:
+    // {
+    //   token: string
+    // }
     
     this.state = {
       isFetching: false,
@@ -42,7 +48,7 @@ export default class Dashboard extends React.Component {
 
   async fetchPoints() {
     try {
-      let response = await fetch("http://localhost:8080/recs/", {
+      let response = await fetch(backendUrl() + "/recs/", {
       method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + this.props.token
@@ -64,7 +70,7 @@ export default class Dashboard extends React.Component {
     let endDateSecs = getUnixTime(endDate);
     
     try {
-      let response = await fetch("http://localhost:8080/his/" + point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
+      let response = await fetch(backendUrl() + "/his/" + point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + this.props.token

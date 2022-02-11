@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import Header from "./header";
 import Login from "./login";
 import Dashboard from "./dashboard";
+import backendUrl from "./backendUrl";
 
 export default function App() {
   let [state, setState] = React.useState({
@@ -21,7 +22,7 @@ export default function App() {
   });
 
   let signin = (username, password, callback) => {
-    fetch('http://localhost:8080/auth/token', {
+    fetch(backendUrl() + "/auth/token", {
       method: 'GET',
       headers: {
         'Authorization': 'Basic ' + base64.encode(username + ":" + password)
@@ -65,14 +66,18 @@ export default function App() {
             <Route 
               path="/login"
               element={
-                <Login onLogin={signin}/> 
+                <Login
+                  onLogin={signin}
+                /> 
               }
             />
             <Route
               path="/dashboard"
               element={
                 <RequireAuth token={state.token} >
-                  <Dashboard token={state.token} />
+                  <Dashboard
+                    token={state.token}
+                  />
                 </RequireAuth>
               }
             />

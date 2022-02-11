@@ -5,9 +5,8 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
-    // TODO: Tighten these config settings up after deployment
-    app.http.server.configuration.hostname = "0.0.0.0" // Allow any hostname usage
-    app.http.server.configuration.port = 8080 // Set to a non-standard port for testing
+    app.http.server.configuration.hostname = "0.0.0.0"
+    app.http.server.configuration.port = 8079
 
     // Change to encode/decode dates as ISO strings
     let encoder: JSONEncoder = .custom(dates: .iso8601)
