@@ -11,4 +11,11 @@ func routes(_ app: Application) throws {
     let tokenAuth = app.grouped(SessionToken.authenticator(), SessionToken.guardMiddleware())
     try tokenAuth.register(collection: RecController())
     try tokenAuth.register(collection: HisController())
+
+    // Fallthrough - non-matched requests go directly to index.html
+    let defaultFile = app.directory.publicDirectory + "index.html"
+    app.get("*") { req -> EventLoopFuture<Response> in
+        let res = req.fileio.streamFile(at: defaultFile)
+        return req.eventLoop.makeSucceededFuture(res)
+    }
 }
