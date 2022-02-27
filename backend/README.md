@@ -16,9 +16,22 @@ DATABASE_PASSWORD=<password>
 DATABASE_NAME=<name>
 ```
 
+## Docker
+
+Build:
+
+```bash
+docker build -t utility-api .
+```
+
+Run:
+
+```bash
+docker run -p 8082:8080 -d --restart=unless-stopped --env-file .env utility-api
+```
+
 ## Future work
 
-- Add web-app to easily input data values
 - Add session authentication: https://docs.vapor.codes/4.0/authentication/#session
 - Change to GraphQL?
 - Consider aligning timestamp format (ISO8601 vs epoch)
