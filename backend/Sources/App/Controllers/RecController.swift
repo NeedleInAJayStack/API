@@ -13,6 +13,7 @@ struct RecController: RouteCollection {
         // GET /recs
         recs.get { req -> EventLoopFuture<[Rec]> in
             return Rec.query(on: req.db)
+                .filter(.sql(json: "tags", "siteMeter"), .equal, .bind("true"))
                 .sort(\.$dis)
                 .all()
         }

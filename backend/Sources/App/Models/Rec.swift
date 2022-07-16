@@ -7,10 +7,6 @@ final class Rec: Model, Content {
 
     @ID(key: .id)
     var id: UUID?
-
-    // TODO: Determine how (or whether) to use JSON data
-//    @Field(key: "tags")
-//    var tags: String
     
     @Field(key: "dis")
     var dis: String
@@ -18,11 +14,23 @@ final class Rec: Model, Content {
     @Field(key: "unit")
     var unit: String?
     
+    // JSON column - since we only filter for a field (and that filter is string-based), this isn't really used.
+    @Field(key: "tags")
+    var tags: Tags?
+    
+    struct Tags: Codable {
+        let siteMeter: Bool?
+        
+        let particleDeviceId: String?
+        let particleVariableName: String?
+    }
+    
     init() { }
 
-    init(id: UUID? = nil, dis: String, unit: String?) {
+    init(id: UUID? = nil, dis: String, unit: String?, tags: Tags?) {
         self.id = id
         self.dis = dis
         self.unit = unit
+        self.tags = tags
     }
 }
