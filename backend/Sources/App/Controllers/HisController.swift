@@ -45,6 +45,9 @@ struct HisController: RouteCollection {
             return try pDb.sql()
                 .insert(into: His.schema)
                 .model(his)
+                .onConflict(with: ["pointId", "ts"]) {
+                    $0.set("value", to: his.value)
+                }
                 .run()
                 .transform(to: Success())
         }
