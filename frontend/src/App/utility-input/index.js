@@ -21,7 +21,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import Chart from './chart';
 import Input from './input';
 
-export default class Dashboard extends React.Component {
+export default class UtilityInput extends React.Component {
 
   constructor(props) {
     super(props);
