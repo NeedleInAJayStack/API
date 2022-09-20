@@ -16,18 +16,10 @@ DATABASE_PASSWORD=<password>
 DATABASE_NAME=<name>
 ```
 
-## Docker
-
-Build:
+## Deploy
 
 ```bash
-docker build -t utility-api .
-```
-
-Run:
-
-```bash
-docker run -p 8082:8080 -d --restart=unless-stopped --env-file .env utility-api
+docker-compose up -d
 ```
 
 ## Future work
