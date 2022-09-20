@@ -43,20 +43,24 @@ export default function App() {
     });
   };
 
-  let signout = (callback) => {
+  function clearTokens() {
     setState({
-      user: null,
-      token: null
+      authToken: null,
+      refreshToken: null
     });
-    callback();
+  }
+
+  let onLogout = () => {
+    clearTokens();
   };
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={ <Login onLogin={onLogin} /> } />
-        <Route path="/"  element={ <RequireAuth token={state.token} /> } >
+        <Route path="/"  element={ <RequireAuth token={state.token} onLogout={onLogout} /> } >
           <Route path="/utility-input" element={ <UtilityInput token={state.token} /> } />
+          <Route path="*" element={ <Navigate to="/" replace /> } />
           <Route path="" element={ <Navigate to="/utility-input" replace /> } />
         </Route>
       </Routes>
@@ -65,10 +69,11 @@ export default function App() {
 }
 
 function RequireAuth(props) {
-  let token = props.token;
+  let authToken = props.token;
+  let onLogout = props.onLogout;
   let location = useLocation();
 
-  if (!token) {
+  if (!authToken) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
@@ -79,7 +84,7 @@ function RequireAuth(props) {
   // If logged in, set the formatting and pass to children based on the route
   return (
     <Box component="div" sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
-      <Header />
+      <Header onLogout={onLogout} />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1}}>
         <Outlet />
       </Box>

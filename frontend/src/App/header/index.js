@@ -1,16 +1,31 @@
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 
-export default function Header() {
+import { useNavigate } from "react-router-dom";
+
+export default function Header(props) {
+  // Props:
+  // - onLogout
+  
+  let navigate = useNavigate();
+
   return (
-    <Box>
-      <AppBar position="static">
+    <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ ml: -2 }}
+        >
+          <MenuIcon/>
+        </IconButton>
+        <Typography variant="h6" component="div" textAlign="center" sx={{ flexGrow: 1 }}>
           JayHerron.org
         </Typography>
         <IconButton
@@ -19,11 +34,14 @@ export default function Header() {
           color="inherit"
           aria-label="menu"
           sx={{ mr: -2 }}
+          onClick={ () => {
+            props.onLogout();
+            navigate("/login", { replace: true });
+          }}
         >
-        <MenuIcon />
+          <LogoutIcon />
         </IconButton>
       </Toolbar>
-      </AppBar>
-    </Box>
+    </AppBar>
   );
 }
