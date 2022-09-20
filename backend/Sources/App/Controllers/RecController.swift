@@ -13,7 +13,6 @@ struct RecController: RouteCollection {
         // GET /recs
         recs.get { req -> EventLoopFuture<[Rec]> in
             return Rec.query(on: req.db)
-                .filter(.sql(json: "tags", "siteMeter"), .equal, .bind("true"))
                 .sort(\.$dis)
                 .all()
         }
@@ -22,6 +21,19 @@ struct RecController: RouteCollection {
         recs.post { req -> EventLoopFuture<Rec> in
             let rec = try req.content.decode(Rec.self)
             return rec.create(on: req.db).transform(to: rec)
+        }
+        
+        let tag = recs.grouped("tag")
+        
+        // GET /recs/tag/:tag
+        tag.get(":tag") { req -> EventLoopFuture<[Rec]> in
+            guard let tag = req.parameters.get("tag") else {
+                throw Abort(.badRequest, reason: "tag parameter is required")
+            }
+            return Rec.query(on: req.db)
+                .filter(.sql(json: "tags", tag), .equal, .bind("true"))
+                .sort(\.$dis)
+                .all()
         }
 
 
