@@ -19,12 +19,14 @@ x-shared_environment: &shared_environment
   
 services:
   app:
-    image: a-p-i:latest
+    image: api:latest
+    restart: unless-stopped
     build:
       context: .
     environment:
       <<: *shared_environment
+    env_file: .env
     ports:
-      - '8080:8080'
+      - '8082:8080'
     # user: '0' # uncomment to run as root for testing purposes even though Dockerfile defines 'vapor' user.
     command: ["serve", "--env", "production", "--hostname", "0.0.0.0", "--port", "8080"]
