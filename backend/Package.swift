@@ -11,6 +11,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.2.2"),
         .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+        .package(url: "https://github.com/mczachurski/Swiftgger.git", from: "1.5.0")
     ],
     targets: [
         .target(
@@ -19,6 +20,7 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 .product(name: "JWT", package: "jwt"),
+                .product(name: "Swiftgger", package: "Swiftgger"),
                 .product(name: "Vapor", package: "vapor"),
             ],
             swiftSettings: [

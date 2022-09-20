@@ -5,6 +5,22 @@ import SQLKit
 import Vapor
 
 func routes(_ app: Application) throws {
+    app.get("openapi") { request in
+        guard let openApiDocument = document else {
+            throw Abort(.internalServerError)
+        }
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(openApiDocument)
+        
+        var headers = HTTPHeaders()
+        headers.add(name: .contentType, value: "application/json")
+        return Response(
+            status: .ok,
+            headers: headers,
+            body: .init(data: data)
+        )
+    }
+    
     let basicAuth = app.grouped(UserBasicAuthenticator(), User.guardMiddleware())
     try basicAuth.register(collection: AuthController())
     

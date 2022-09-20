@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AnyCodable",
+        "repositoryURL": "https://github.com/Flight-School/AnyCodable",
+        "state": {
+          "branch": null,
+          "revision": "56901f2af3625b38924d488b612e95fe8846ee9b",
+          "version": "0.6.6"
+        }
+      },
+      {
         "package": "async-http-client",
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
@@ -224,6 +233,15 @@
           "branch": null,
           "revision": "0a5bc04095a675662cf24757cc0640aa2204253b",
           "version": "1.0.2"
+        }
+      },
+      {
+        "package": "Swiftgger",
+        "repositoryURL": "https://github.com/mczachurski/Swiftgger.git",
+        "state": {
+          "branch": null,
+          "revision": "25d9ea884067764ab314cd3bf7e0ca19867b3f45",
+          "version": "1.5.0"
         }
       },
       {
