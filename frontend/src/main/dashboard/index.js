@@ -48,7 +48,7 @@ export default class Dashboard extends React.Component {
 
   async fetchPoints() {
     try {
-      let response = await fetch(backendUrl() + "/recs/", {
+      let response = await fetch(backendUrl() + "/recs/tag/siteMeter", {
       method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + this.props.token
