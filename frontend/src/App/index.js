@@ -13,7 +13,6 @@ import Box from '@mui/material/Box';
 import Header from "./header";
 import Login from "./login";
 import Dashboard from "./dashboard";
-import backendUrl from "./backendUrl";
 
 export default function App() {
   let [state, setState] = React.useState({
@@ -22,7 +21,7 @@ export default function App() {
   });
 
   let signin = (username, password, callback) => {
-    fetch(backendUrl() + "/auth/token", {
+    fetch("/auth/token", {
       method: 'GET',
       headers: {
         'Authorization': 'Basic ' + base64.encode(username + ":" + password)

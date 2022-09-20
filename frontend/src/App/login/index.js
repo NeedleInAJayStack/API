@@ -9,8 +9,6 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
-import backendUrl from "../backendUrl";
-
 export default function Login(props) {
   const [state, setState] = React.useState({
     username: "",

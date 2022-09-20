@@ -12,8 +12,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
-import backendUrl from "../../backendUrl";
-
 export default class Input extends React.Component {
 
   constructor(props) {
@@ -39,7 +37,7 @@ export default class Input extends React.Component {
       value: this.state.value
     };
     try {
-      await fetch(backendUrl() + "/his/" + this.props.point.id, {
+      await fetch("/his/" + this.props.point.id, {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + this.props.token,
