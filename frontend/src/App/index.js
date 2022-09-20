@@ -6,7 +6,8 @@ import {
   Route,
   useLocation,
   useNavigate,
-  Navigate
+  Navigate,
+  Outlet
 } from "react-router-dom";
 import Box from '@mui/material/Box';
 
@@ -20,7 +21,7 @@ export default function App() {
     token: null
   });
 
-  let signin = (username, password, callback) => {
+  let onLogin = (username, password, onSuccess, onFailure) => {
     fetch("/auth/token", {
       method: 'GET',
       headers: {
@@ -34,10 +35,10 @@ export default function App() {
             user: username,
             token: token
           });
-          callback();
+          onSuccess();
         })
       } else {
-        alert("User or password not recognized")
+        onFailure();
       }
     });
   };
@@ -51,39 +52,15 @@ export default function App() {
   };
 
   return (
-    <Box component="div" sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
-      <Header />
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1}}>
-        <BrowserRouter>
-          <Routes>
-            <Route 
-              path="/"
-              element={
-                <Navigate to="/dashboard" replace />
-              }
-            />
-            <Route 
-              path="/login"
-              element={
-                <Login
-                  onLogin={signin}
-                /> 
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <RequireAuth token={state.token} >
-                  <Dashboard
-                    token={state.token}
-                  />
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </Box>
-    </Box>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={ <Login onLogin={onLogin} /> } />
+        <Route path="/"  element={ <RequireAuth token={state.token} /> } >
+          <Route path="/dashboard" element={ <Dashboard token={state.token} /> } />
+          <Route path="" element={ <Navigate to="/dashboard" replace /> } />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
@@ -99,27 +76,13 @@ function RequireAuth(props) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return props.children;
-}
-
-function AuthStatus() {
-  let auth = useAuth();
-  let navigate = useNavigate();
-
-  if (!auth.state.user) {
-    return <p>You are not logged in.</p>;
-  }
-
+  // If logged in, set the formatting and pass to children based on the route
   return (
-    <p>
-      Welcome {auth.state.user}!{" "}
-      <button
-        onClick={() => {
-          auth.signout(() => navigate("/"));
-        }}
-      >
-        Sign out
-      </button>
-    </p>
+    <Box component="div" sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
+      <Header />
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1}}>
+        <Outlet />
+      </Box>
+    </Box>
   );
 }
