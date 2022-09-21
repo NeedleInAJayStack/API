@@ -20,6 +20,7 @@ import DatePicker from '@mui/lab/DatePicker';
 
 import Chart from './chart';
 import Input from './input';
+import { getHis, getRecsTag } from "../API";
 
 export default class UtilityInput extends React.Component {
 
@@ -46,18 +47,8 @@ export default class UtilityInput extends React.Component {
   }
 
   async fetchPoints() {
-    try {
-      let response = await fetch("/recs/tag/siteMeter", {
-      method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + this.props.token
-        }
-      })
-      let points = await response.json();
-      this.setState({...this.state, points: points});
-    } catch (e) {
-      console.log(e);
-    }
+    let points = await getRecsTag("siteMeter", this.props.token);
+    this.setState({...this.state, points: points});
   }
   
   async fetchHis(point, startDate, endDate) {
@@ -68,25 +59,14 @@ export default class UtilityInput extends React.Component {
     let startDateSecs = getUnixTime(startDate);
     let endDateSecs = getUnixTime(endDate);
     
-    try {
-      let response = await fetch("/his/" + point.id + "?start=" + startDateSecs + "&end=" + endDateSecs, {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + this.props.token
-        }
-      });
-      let json = await response.json();
-      let his = json.map(row => {
-        let ts = parseISO(row.ts)
-        let value = row.value
+    let json = await getHis(point.id, startDateSecs, endDateSecs, this.props.token);
+    let his = json.map(row => {
+      let ts = parseISO(row.ts)
+      let value = row.value
 
-        return {x: ts, y: value}
-      });
-      return his;
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
+      return {x: ts, y: value}
+    });
+    return his;
   }
 
   onPointChange(event) {

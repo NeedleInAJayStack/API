@@ -1,11 +1,9 @@
-import base64 from "base-64";
 import React from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
   useLocation,
-  useNavigate,
   Navigate,
   Outlet
 } from "react-router-dom";
@@ -14,6 +12,7 @@ import Box from '@mui/material/Box';
 import Header from "./header";
 import Login from "./login";
 import UtilityInput from "./utility-input";
+import { getAuthToken } from "./API";
 
 export default function App() {
   let [state, setState] = React.useState({
@@ -22,25 +21,17 @@ export default function App() {
   });
 
   let onLogin = (username, password, onSuccess, onFailure) => {
-    fetch("/auth/token", {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Basic ' + base64.encode(username + ":" + password)
-      }
-    }).then(response => {
-      if (response.ok) {
-        response.json().then(result => {
-          let token = result.token;
-          setState({
-            user: username,
-            token: token
-          });
-          onSuccess();
-        })
-      } else {
-        onFailure();
-      }
-    });
+    try {
+      getAuthToken(username, password).then((result) => {
+        setState({
+          user: username,
+          token: result.token
+        });
+        onSuccess();
+      });
+    } catch {
+      onFailure();
+    }
   };
 
   function clearTokens() {

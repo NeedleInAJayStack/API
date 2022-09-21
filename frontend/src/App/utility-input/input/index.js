@@ -1,6 +1,5 @@
 import React from "react";
 
-import formatISO from "date-fns/formatISO";
 import startOfToday from 'date-fns/startOfToday';
 import subDays from 'date-fns/subDays';
 
@@ -11,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import { postHis } from "../../API";
 
 export default class Input extends React.Component {
 
@@ -31,23 +31,11 @@ export default class Input extends React.Component {
   }
   
   async writeHis() {
-    let body = {
-      pointId: this.props.point.id,
-      ts: formatISO(this.state.date), // We use date-fns implementation here to avoid milliseconds (Swift hates them and me)
-      value: this.state.value
-    };
-    try {
-      await fetch("/his/" + this.props.point.id, {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + this.props.token,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    await postHis(
+      this.props.point.id,
+      this.state.date,
+      this.state.value
+    );
   }
 
   render() {
