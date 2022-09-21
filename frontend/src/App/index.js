@@ -7,12 +7,24 @@ import {
   Navigate,
   Outlet
 } from "react-router-dom";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
 import Header from "./header";
 import Login from "./login";
 import UtilityInput from "./utility-input";
 import { getAuthToken } from "./API";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2196f3',
+    },
+    secondary: {
+      main: '#1de9b6',
+    },
+  },
+});
 
 export default function App() {
   let [state, setState] = React.useState({
@@ -46,16 +58,18 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={ <Login onLogin={onLogin} /> } />
-        <Route path="/"  element={ <RequireAuth token={state.token} onLogout={onLogout} /> } >
-          <Route path="/utility-input" element={ <UtilityInput token={state.token} /> } />
-          <Route path="*" element={ <Navigate to="/" replace /> } />
-          <Route path="" element={ <Navigate to="/utility-input" replace /> } />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={ <Login onLogin={onLogin} /> } />
+          <Route path="/"  element={ <RequireAuth token={state.token} onLogout={onLogout} /> } >
+            <Route path="/utility-input" element={ <UtilityInput token={state.token} /> } />
+            <Route path="*" element={ <Navigate to="/" replace /> } />
+            <Route path="" element={ <Navigate to="/utility-input" replace /> } />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
