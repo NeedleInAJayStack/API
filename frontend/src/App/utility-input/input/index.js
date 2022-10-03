@@ -34,7 +34,8 @@ export default class Input extends React.Component {
     await postHis(
       this.props.point.id,
       this.state.date,
-      this.state.value
+      this.state.value,
+      this.props.token
     );
   }
 
