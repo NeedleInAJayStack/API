@@ -15,13 +15,14 @@ import Login from "./login";
 import UtilityInput from "./utility-input";
 import { getAuthToken } from "./API";
 
+// https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=B2DFDB&secondary.color=616161
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2196f3',
+      main: '#b2dfdb',
     },
     secondary: {
-      main: '#1de9b6',
+      main: '#616161',
     },
   },
 });

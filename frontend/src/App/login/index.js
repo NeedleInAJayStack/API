@@ -51,18 +51,6 @@ export default function Login(props) {
       height="100%"
       overflow="hidden"
     >
-      <Typography 
-        variant="h2"
-        gutterBottom
-        width="100%"
-        display="flex"
-        flexGrow={1}
-        justifyContent="center"
-        alignItems="end"
-        textAlign="center"
-      >
-        JayHerron.org
-      </Typography>
       <Box 
         display="flex"
         flexDirection="column"

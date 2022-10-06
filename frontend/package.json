@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Website to input utility bill data",
   "main": "index.js",
-  "proxy": "http://localhost:8079",
+  "proxy": "https://data.jayherron.org",
   "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
