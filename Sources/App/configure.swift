@@ -34,7 +34,19 @@ public func configure(_ app: Application) throws {
     let username = try Environment.getOrThrow("DATABASE_USERNAME")
     let password = try Environment.getOrThrow("DATABASE_PASSWORD")
     let database = try Environment.getOrThrow("DATABASE_NAME")
-    app.databases.use(.postgres(hostname: hostname, username: username, password: password, database: database), as: .psql)
+    let sslContext = try NIOSSLContext(configuration: .clientDefault)
+    app.databases.use(
+        .postgres(
+            configuration: SQLPostgresConfiguration(
+                hostname: hostname,
+                username: username,
+                password: password,
+                database: database,
+                tls: .prefer(sslContext)
+            )
+        ),
+        as: .psql
+    )
     // app.logger.logLevel = .debug
     
     // Migrations
