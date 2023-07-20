@@ -34,7 +34,6 @@ public func configure(_ app: Application) throws {
     let username = try Environment.getOrThrow("DATABASE_USERNAME")
     let password = try Environment.getOrThrow("DATABASE_PASSWORD")
     let database = try Environment.getOrThrow("DATABASE_NAME")
-    let sslContext = try NIOSSLContext(configuration: .clientDefault)
     app.databases.use(
         .postgres(
             configuration: SQLPostgresConfiguration(
@@ -42,7 +41,7 @@ public func configure(_ app: Application) throws {
                 username: username,
                 password: password,
                 database: database,
-                tls: .prefer(sslContext)
+                tls: .disable
             )
         ),
         as: .psql
