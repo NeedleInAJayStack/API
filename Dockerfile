@@ -1,7 +1,7 @@
 # ================================
 # Build image
 # ================================
-FROM swift:5.8-focal as build
+FROM swift:5.8-jammy as build
 
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
     && apt-get -q update \
@@ -22,7 +22,7 @@ RUN [ -d /build/Resources ] && { mv /build/Resources ./Resources && chmod -R a-w
 # ================================
 # Run image
 # ================================
-FROM swift:5.8-focal-slim
+FROM swift:5.8-jammy-slim
 
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true && \
     apt-get -q update && apt-get -q dist-upgrade -y && rm -r /var/lib/apt/lists/*
