@@ -2,6 +2,8 @@ import Fluent
 import Vapor
 
 
+/// A "User" in the system. Users are not persisted or tied to the data in any way, but is only used for authentication.
+/// Login is controlled by environment variables in a form that only supports a single user.
 struct User: Authenticatable {
     var name: String
 }
@@ -13,19 +15,15 @@ struct UserBasicAuthenticator: BasicAuthenticator {
         basic: BasicAuthorization,
         for request: Request
     ) -> EventLoopFuture<Void> {
-        do {
+        return request.eventLoop.tryFuture {
             let username = try Environment.getOrThrow("USERNAME")
             let password = try Environment.getOrThrow("PASSWORD")
             
             if basic.username == username && basic.password == password {
                 request.auth.login(User(name: basic.username))
             }
-        } catch {
-            return request.eventLoop.makeFailedFuture(error)
         }
-        
-        return request.eventLoop.makeSucceededVoidFuture()
-   }
+    }
 }
 
 extension User: SessionAuthenticatable {
