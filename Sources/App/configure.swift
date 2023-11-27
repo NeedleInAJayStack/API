@@ -1,5 +1,6 @@
 import Fluent
 import FluentPostgresDriver
+import FluentSQLiteDriver
 import JWT
 import Vapor
 
@@ -29,24 +30,24 @@ public func configure(_ app: Application) throws {
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory, defaultFile: "index.html"))
     
 
-    // Database connection
-    let hostname = try Environment.getOrThrow("DATABASE_HOST")
-    let username = try Environment.getOrThrow("DATABASE_USERNAME")
-    let password = try Environment.getOrThrow("DATABASE_PASSWORD")
-    let database = try Environment.getOrThrow("DATABASE_NAME")
-    app.databases.use(
-        .postgres(
-            configuration: SQLPostgresConfiguration(
-                hostname: hostname,
-                username: username,
-                password: password,
-                database: database,
-                tls: .disable
-            )
-        ),
-        as: .psql
-    )
-    // app.logger.logLevel = .debug
+    // Database
+    switch app.environment {
+    case .testing:
+        app.databases.use(.sqlite(.memory), as: .sqlite)
+    default:
+        try app.databases.use(
+            .postgres(
+                configuration: SQLPostgresConfiguration(
+                    hostname: Environment.getOrThrow("DATABASE_HOST"),
+                    username: Environment.getOrThrow("DATABASE_USERNAME"),
+                    password: Environment.getOrThrow("DATABASE_PASSWORD"),
+                    database: Environment.getOrThrow("DATABASE_NAME"),
+                    tls: .disable
+                )
+            ),
+            as: .psql
+        )
+    }
     
     // Migrations
     app.migrations.add(MigrationV1_0_0())
