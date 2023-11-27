@@ -6,6 +6,7 @@ import Vapor
 
 func routes(_ app: Application) throws {
     let basicAuth = app
+        .grouped(app.sessions.middleware) // Limits to only token retrieval that considers sessions
         .grouped(UserSessionAuthenticator()) // Allow active sessions to get tokens
         .grouped(UserBasicAuthenticator()) // Allow basic auth to get tokens
         .grouped(User.guardMiddleware())
