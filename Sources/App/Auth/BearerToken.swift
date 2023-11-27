@@ -1,7 +1,7 @@
 import JWT
 import Vapor
 
-struct SessionToken: Content, Authenticatable, JWTPayload {
+struct BearerToken: Content, Authenticatable, JWTPayload {
     
     let expirationTime = 15 * 60 // 15 minutes
     
