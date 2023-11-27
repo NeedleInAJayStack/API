@@ -5,10 +5,15 @@ import SQLKit
 import Vapor
 
 func routes(_ app: Application) throws {
-    let basicAuth = app.grouped(UserBasicAuthenticator(), User.guardMiddleware())
+    let basicAuth = app
+        .grouped(UserSessionAuthenticator()) // Allow active sessions to get tokens
+        .grouped(UserBasicAuthenticator()) // Allow basic auth to get tokens
+        .grouped(User.guardMiddleware())
     try basicAuth.register(collection: AuthController())
     
-    let tokenAuth = app.grouped(SessionToken.authenticator(), SessionToken.guardMiddleware())
+    let tokenAuth = app
+        .grouped(SessionToken.authenticator())
+        .grouped(SessionToken.guardMiddleware())
     try tokenAuth.register(collection: RecController())
     try tokenAuth.register(collection: HisController())
 

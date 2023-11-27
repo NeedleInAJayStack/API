@@ -22,8 +22,13 @@ DATABASE_NAME=<name>
 docker-compose up -d
 ```
 
+## Development
+
+### Front-end
+
+The frontend is coded [here](https://github.com/NeedleInAJayStack/data-web-app), packaged, and copied into this repo's Public folder.
+
 ## Future work
 
-- Add session authentication: https://docs.vapor.codes/4.0/authentication/#session
 - Change to GraphQL?
 - Consider aligning timestamp format (ISO8601 vs epoch)

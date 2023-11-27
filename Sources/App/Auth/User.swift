@@ -27,3 +27,10 @@ struct UserBasicAuthenticator: BasicAuthenticator {
         return request.eventLoop.makeSucceededVoidFuture()
    }
 }
+
+extension User: SessionAuthenticatable {
+    var sessionID: String {
+        // User is identified uniquely by its name
+        self.name
+    }
+}
