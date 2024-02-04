@@ -13,15 +13,13 @@
  */
 
 /*!
- * chartjs-adapter-date-fns v2.0.0
+ * chartjs-adapter-date-fns v2.0.1
  * https://www.chartjs.org
- * (c) 2021 chartjs-adapter-date-fns Contributors
+ * (c) 2022 chartjs-adapter-date-fns Contributors
  * Released under the MIT license
  */
 
 /*! https://mths.be/base64 v1.0.0 by @mathias | MIT license */
-
-/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
 /**
  * @license React
@@ -74,7 +72,7 @@
  */
 
 /**
- * @remix-run/router v1.0.2
+ * @remix-run/router v1.15.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -85,7 +83,7 @@
  */
 
 /**
- * React Router v6.4.2
+ * React Router v6.22.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -93,12 +91,6 @@
  * LICENSE.md file in the root directory of this source tree.
  *
  * @license MIT
- */
-
-/** @license MUI v5.10.8
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
  */
 
 /** @license React v16.13.1
