@@ -10,7 +10,8 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
 
 WORKDIR /build
 COPY ./Package.* ./
-RUN swift package resolve
+RUN swift package resolve \
+        $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
 COPY . .
 RUN swift build -c release
 
